@@ -51,9 +51,25 @@ def getPercentOfQueerCharactersWihtAlignmentA(df, a):
     return alignA / num
 
 def createAlignmentHistorgram(df):
-    queerAlign = list(filter(lambda x: x["GSM"] == 1 or x["GSM"] == 2, df))
-    figQueer = px.histogram(queerAlign, 5, lables={"values": "total number", "count": "Alignment"})
+    #queerAlign = list(filter(lambda x: x["GSM"] == 1 or x["GSM"] == 2, df))
+    nQueerData = df[(df["GSM"] != 1) & (df["GSM"] != 2)]
+    figNormal = px.histogram(nQueerData, x="ALIGN", labels={"values": "total number", "count": "Alignment"})
+    figNormal.update_layout(
+        xaxis_title ="Alignment (0 = non, 1 = Good, 2 = Bad, 3 = Neutral, 4 = ex Criminal)",
+        yaxis_title="Number",
+        title = "Non queer character alignment"
+    )
+    figNormal.show()
+
+    queerData = df[(df["GSM"] == 1) | (df["GSM"] == 2)]
+    figQueer = px.histogram(queerData, x="ALIGN", labels={"values": "total number", "count": "Alignment"})
+    figQueer.update_layout(
+        xaxis_title ="Alignment (0 = non, 1 = Good, 2 = Bad, 3 = Neutral, 4 = ex Criminal)",
+        yaxis_title="Number",
+        title = "Queer character alignment"
+    )
     figQueer.show()
+
 df = pd.read_csv("dc-wikia-data.csv")
 
 preprocessData(df)
